@@ -17,5 +17,5 @@ Route::get('/', function()
 });
 
 Route::get('/results/event/{id}', 'ResultController@index');
-Route::get('/results/event/{id}/round/{roundid}', 'ResultController@index');
+Route::get('/results/event/{id}/round/{roundno}', 'ResultController@index');
 Route::get('/events', 'EventController@index');
