@@ -11,11 +11,8 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('hello');
-});
 
 Route::get('/results/event/{id}', 'ResultController@index');
 Route::get('/results/event/{id}/round/{roundno}', 'ResultController@index');
 Route::get('/events', 'EventController@index');
+Route::get('/', 'EventController@index');
