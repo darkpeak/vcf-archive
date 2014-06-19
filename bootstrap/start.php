@@ -24,17 +24,10 @@ $app = new Illuminate\Foundation\Application;
 |
 */
 
-$env = $app->detectEnvironment(function() {
-    $host = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
-    switch($host) {
-        case 'vcf-archive.whitepeak.org':
-            return 'staging';
-        case 'localhost':
-            return 'local';
-        default:
-            return null;
-    }
-});
+$env = $app->detectEnvironment(array(
+    'local' => 'localhost',
+    'staging' => 'web'
+));
 
 /*
 |--------------------------------------------------------------------------
