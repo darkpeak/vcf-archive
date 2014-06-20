@@ -25,8 +25,8 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(array(
-    'local' => 'localhost',
-    'staging' => 'web'
+    'local' => 'Martins-Mac-Mini.local',
+    'staging' => array('web', 'vcf')
 ));
 
 /*
