@@ -17,23 +17,21 @@ class ResultController extends BaseController {
 
     public function index()
     {
+        $roundNo = e(Input::get('round'));
         $id = e(Route::input('id'));
-        $roundNo = e(Route::input('round'));
-        if($roundNo == null)  $roundNo = 1;
+        if(strlen($roundNo) == 0) {
+            $roundNo = e(Route::input('round'));
+            if($roundNo == null)  $roundNo = 1;
+        }
         $round = Round::where('EventID', '=', $id)->where('RoundNumber', '=', $roundNo)->firstOrFail();
+        $roundsForEvent = Round::where('EventID', '=', $id)->orderBy('RoundNumber')->get();
+        $roundsForEventSelect = array();
+        foreach($roundsForEvent as $r) {
+            $coursename = $r->course !== null ? $r->course->Name : '[deleted course]';
+            $roundsForEventSelect[$r->RoundNumber] = $r->RoundNumber . ': ' . $coursename;
+        }
         $event = CyclingEvent::find($id);
-//
-//        $sql = "select results.*, duration + timepenalty as TotalTime,divisions.DivisionID,divisions.DivisionName, teams.Name as TeamName,teams.Colour,concat(lower(countries.code), '.png') as flagname,profiledata.country as country " .
-//        "from results " .
-//        "left join eventrider on results.ridername = eventrider.ridername and results.eventid = eventrider.eventid " .
-//        "left join divisions on eventrider.divisionid = divisions.divisionid " .
-//        "left join teamrider on results.ridername=teamrider.ridername and results.eventid=teamrider.eventid " .
-//        "left join teams on teamrider.teamid=teams.teamid " .
-//        "left join profiledata on profiledata.fullname = results.ridername " .
-//        "left join countries on countries.name = profiledata.country " .
-//        "where roundid = ?roundid and results.trainer like ?trainer order by Duration + TimePenalty";
 
-//        $results = Result::where('EventID', '=', $id)->where('RoundID', '=', $round->RoundID)->orderBy('Duration')->get();
         $results = DB::table('results')
             ->select(DB::raw('results.*, duration + timepenalty as TotalTime,divisions.DivisionID,divisions.DivisionName, teams.Name as TeamName,teams.Colour,concat(lower(countries.code), ".png")'))
             ->leftJoin('eventrider', function($join) {
@@ -52,7 +50,7 @@ class ResultController extends BaseController {
             ->orderByRaw('Duration + TimePenalty, AvSpeed desc')
             ->get();
 
-        return View::make('results', array('results' => $results, 'event' => $event));
+        return View::make('results', array('results' => $results, 'event' => $event, 'round' => $round, 'roundsForEvent' => $roundsForEventSelect));
     }
 
 }

@@ -17,7 +17,6 @@ class EventController extends BaseController {
 
     public function index()
     {
-//        $events = CyclingEvent::all()->orderBy('End', 'asc');
         $events = CyclingEvent::where('Visible', '<>', 0)->orderBy('Start')->get();
 
         return View::make('events')->with('events', $events);

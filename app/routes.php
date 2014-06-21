@@ -13,6 +13,7 @@
 
 
 Route::get('/results/event/{id}', 'ResultController@index');
+Route::post('/results/event/{id}', 'ResultController@index');
 Route::get('/results/event/{id}/round/{roundno}', 'ResultController@index');
 Route::get('/events', 'EventController@index');
 Route::get('/', 'EventController@index');
